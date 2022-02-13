@@ -1,9 +1,12 @@
 ﻿using CoffeeShop.GlobalConstant;
+using System;
+using System.Threading.Tasks;
 
 namespace CoffeeShop.DesignPattern
 {	
 	public abstract class TheCoffee : ICoffeeDisplay
 	{
+		protected int timeToWait = 1000;
 		protected int filterCoffee;
 		protected Constanst.CupSize cupSize = Constanst.CupSize.Medium;
 		protected bool hasResource;
@@ -25,20 +28,13 @@ namespace CoffeeShop.DesignPattern
 			bool hasMilk = CoffeeRawMaterials.Self.CheckMilk(cupSize);
 			hasResource = hasFilterCoffee && hasMilk;
 		}
-		public virtual /*async*/ void Make()
-		{
-			if(hasResource)
-            {
-				filterCoffee = CoffeeRawMaterials.Self.GetFilterCoffee(cupSize);
-				milk = CoffeeRawMaterials.Self.GetMilk(cupSize);
-			}
+		public virtual async Task Make() {}
+		protected void TakeCoffeeAndMilk()
+        {
+			filterCoffee = CoffeeRawMaterials.Self.GetFilterCoffee(cupSize);
+			milk = CoffeeRawMaterials.Self.GetMilk(cupSize);
 		}
-		public virtual ICoffeeDisplay Ready() {
-			int size = (int)Constanst.ValMid.FilterCoffee + (int)Constanst.ValMid.Milk;
-			if (Global.GetValueFromCupSize(cupSize, size) == (filterCoffee + milk)) 
-				return this; 
-			return null; 
-		}
+		public virtual ICoffeeDisplay Ready() { return this; }
 		public override string Display()
 		{
 			return string.Format("WhiteCoffee: size {0}, has milk", base.Display());
@@ -50,12 +46,17 @@ namespace CoffeeShop.DesignPattern
 		public WhiteCoffeeIce(Constanst.CupSize cupSize) : base(cupSize) {
 			bool hasIce = CoffeeRawMaterials.Self.CheckIceBlend(cupSize);
 			hasResource = hasResource && hasIce;
+			timeToWait = 3000;
 		}
-		public override void Make()
+		public override async Task Make()
 		{
-			base.Make();
-			if (hasResource) 
+			if (hasResource)
+            {
+				await Task.Delay(timeToWait);
+				TakeCoffeeAndMilk();
 				iceBlend = CoffeeRawMaterials.Self.GetIceBlend(cupSize);
+				Console.WriteLine($"Making WhiteCoffeeIce size {cupSize} in {timeToWait}");
+			}
 			hasResource = false;        // trigger to prevent CoffeeRawMaterials.Self.GetXXX call multiple
 		}
 		public override ICoffeeDisplay Ready() {
@@ -76,11 +77,15 @@ namespace CoffeeShop.DesignPattern
 			bool hasBoildWater = CoffeeRawMaterials.Self.CheckBoiledWater(cupSize);
 			hasResource = hasResource && hasBoildWater;
 		}		
-		public override void Make()
+		public override async Task Make()
 		{
-			base.Make();
 			if (hasResource)
+            {
+				await Task.Delay(timeToWait);
+				TakeCoffeeAndMilk();
 				boldedW = CoffeeRawMaterials.Self.GetBoiledWater(cupSize);
+				Console.WriteLine($"Making WhiteCoffeeHot size {cupSize} in {timeToWait}");
+			}
 			hasResource = false;        // trigger to prevent CoffeeRawMaterials.Self.GetXXX call multiple
 		}
 		public override ICoffeeDisplay Ready()
@@ -103,6 +108,12 @@ namespace CoffeeShop.DesignPattern
 		public ICoffee CreateWhiteCoffeeHot(Constanst.CupSize size) {
 			return new WhiteCoffeeHot(size);
 		}
+		//public ICoffee CreateBlackCoffeeIce(Constanst.CupSize size) {
+		//	return new BlackCoffeeIce(size);
+		//}
+		//public ICoffee CreateBlackCoffeeHot(Constanst.CupSize size) {
+		//	return new BlackCoffeeHot(size);
+		//}
 	}
 
 }

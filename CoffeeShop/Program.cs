@@ -1,55 +1,67 @@
 ﻿using System;
 using CoffeeShop.GlobalConstant;
 using CoffeeShop.DesignPattern;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CoffeeShop
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine(Global.GetMenu());
-            Client c = new();
-            Staff staff = new(c.OrderWhiteCoffee(true));
-            c.Wait(staff.HasWhiteCoffee(Constanst.CupSize.Small));
-            c.Receive(staff.TakeCoffeeBack());
-
-            Client c2 = new();
-            Staff staff2 = new(c2.OrderWhiteCoffee(false));
-            c2.Wait(staff2.HasWhiteCoffee(Constanst.CupSize.Medium));
-            c2.Receive(staff2.TakeCoffeeBack());
-
-        }
-    }
-	public class Client
+	class Program
 	{
-		bool hasWait = false;
-		public Constanst.Menu OrderWhiteCoffee(bool isHot)
+		static async Task Main(string[] args)
 		{
-			if (isHot)
-				return Constanst.Menu.WhiteCoffeeHot;
-			return Constanst.Menu.WhiteCoffeeIce;
+			List<Task> tasks = new List<Task>();
+			Console.WriteLine(Global.GetMenu());
+			Client c = new(Constanst.Menu.WhiteCoffeeHot, Constanst.CupSize.Small);
+			Staff staff = new(c.GetOrder());
+			if(staff.HasResource())
+            {
+				tasks.Add(staff.TakingTo(c));
+			}
+
+			Client c2 = new(Constanst.Menu.WhiteCoffeeIce, Constanst.CupSize.Medium);
+			staff = new(c2.GetOrder());
+			if(staff.HasResource())
+            {
+				tasks.Add(staff.TakingTo(c2));
+			}
+			
+			while (tasks.Count > 0)
+            {
+				Task finishedTask = await Task.WhenAny(tasks);
+
+				tasks.Remove(finishedTask);
+			}
 		}
-		public void Wait(bool hasResouce)
-		{
-			if (!hasResouce) Console.WriteLine("Sorry, has not at the moment");
-			else hasWait = hasResouce;
+	}
+	public class Client : IClient
+	{
+        readonly Order order = new();
+		public Order GetOrder()
+        {
+			return order;
+
 		}
+		public Client(Constanst.Menu menu, Constanst.CupSize cupSize)
+        {
+			order.Menu = menu;
+			order.CupSize = cupSize;
+        }
 		public void Receive(ICoffeeDisplay coffee)
 		{
-			if (!hasWait || coffee == null) return;
+			if (coffee == null) return;
 			Console.WriteLine("Let check order: " + coffee.Display());
 		}
 	}
 	public class Staff
 	{
-		readonly ICoffeeFactory factory; ICoffee coffee;
-		readonly Constanst.Menu menu;
-
-		public Staff(Constanst.Menu menu)
-		{
-			this.menu = menu;
-			switch (menu)
+        readonly Order order;
+		readonly ICoffeeFactory factory; 
+		ICoffee coffee;
+		public Staff(Order order)
+        {
+			this.order = order;
+			switch (order.Menu)
 			{
 				case Constanst.Menu.WhiteCoffeeHot:
 				case Constanst.Menu.WhiteCoffeeIce:
@@ -61,19 +73,33 @@ namespace CoffeeShop
 					break;
 			}
 		}
-		public bool HasWhiteCoffee(Constanst.CupSize size)
+		public bool HasResource()
 		{
 			if (factory == null) return false;
-			if (menu == Constanst.Menu.WhiteCoffeeIce)
-				coffee = factory.CreateWhiteCoffeeIce(size);
-			if (menu == Constanst.Menu.WhiteCoffeeHot)
-				coffee = factory.CreateWhiteCoffeeHot(size);
-			return coffee.HasResource();
+			switch (order.Menu)
+			{
+				case Constanst.Menu.WhiteCoffeeHot:
+					coffee = factory.CreateWhiteCoffeeHot(order.CupSize);
+					break;
+				case Constanst.Menu.WhiteCoffeeIce:
+					coffee = factory.CreateWhiteCoffeeIce(order.CupSize);
+					break;
+				case Constanst.Menu.BlackCoffeeHot:
+				case Constanst.Menu.BlackCoffeeIce:
+				case Constanst.Menu.MilkCoffeeHot:
+				case Constanst.Menu.MilkCoffeeIce:
+					
+					break;
+			}
+			bool hasResource = coffee != null ? coffee.HasResource() : false;
+			if(!hasResource)
+				Console.WriteLine($"Sorry, has not {ExtensionMethod.GetStringValue(order.Menu)} with {order.CupSize} at the moment");
+			return hasResource;
 		}
-		public ICoffeeDisplay TakeCoffeeBack()
-		{
-			coffee.Make();      // waiting
-			return coffee.Ready();
+		public async Task TakingTo(Client c)
+        {
+			await coffee.Make(); // making
+			c.Receive(coffee.Ready());
 		}
 	}
 }

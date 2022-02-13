@@ -15,7 +15,7 @@ namespace CoffeeShop.DesignPattern
     {
         public CoffeeRawMaterials()
         {
-            FilterCoffee = 66;
+            FilterCoffee = 55;
             Milk = 222;
             IceBlend = 222;
             BoiledWater = 222;
