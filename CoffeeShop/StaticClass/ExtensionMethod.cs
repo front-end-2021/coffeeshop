@@ -1,8 +1,7 @@
-﻿using CoffeeShop.DesignPattern;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using CoffeeShop.GlobalConstant;
 using System.Reflection;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,8 +12,7 @@ namespace CoffeeShop
 
         /// <summary>
         /// Will get the string value for a given enums value, this will
-        /// only work if you assign the StringValue attribute to
-        /// the items in your enum.
+        /// only work if you assign the StringValue attribute to the items in your enum.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
