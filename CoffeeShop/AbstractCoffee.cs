@@ -38,8 +38,8 @@ namespace CoffeeShop.DesignPattern
 			if (hasResource)
 			{
 				Console.WriteLine($"Making BlackCoffeeIce size {cupSize} in {timeToWait}");
-				await Task.Delay(timeToWait);
 				TakeFilterCoffee();
+				await Task.Delay(timeToWait);
 				iceBlend = CoffeeRawMaterials.Self.GetIceBlend(cupSize);
 			}
 			hasResource = false;        // trigger to prevent CoffeeRawMaterials.Self.GetXXX call multiple

@@ -21,6 +21,12 @@ namespace CoffeeShop.DesignPattern
 		{
 			return string.Format("WhiteCoffee: size {0}", base.Display());
 		}
+		protected async Task TakingcoffeeAndMilk(string txtClass)
+        {
+			Console.WriteLine($"Making {txtClass} size {cupSize} in {timeToWait}");
+			TakeCoffeeAndMilk();
+			await Task.Delay(timeToWait);
+		}
 	}
 	public class WhiteCoffeeIce : WhiteCoffee
 	{
@@ -34,9 +40,7 @@ namespace CoffeeShop.DesignPattern
 		{
 			if (hasResource)
             {
-				Console.WriteLine($"Making WhiteCoffeeIce size {cupSize} in {timeToWait}");
-				await Task.Delay(timeToWait);
-				TakeCoffeeAndMilk();
+				await TakingcoffeeAndMilk("WhiteCoffeeIce");
 				iceBlend = CoffeeRawMaterials.Self.GetIceBlend(cupSize);
 			}
 			hasResource = false;        // trigger to prevent CoffeeRawMaterials.Self.GetXXX call multiple
@@ -63,9 +67,7 @@ namespace CoffeeShop.DesignPattern
 		{
 			if (hasResource)
             {
-				Console.WriteLine($"Making WhiteCoffeeHot size {cupSize} in {timeToWait}");
-				await Task.Delay(timeToWait);
-				TakeCoffeeAndMilk();
+				await TakingcoffeeAndMilk("WhiteCoffeeHot");
 				boldedW = CoffeeRawMaterials.Self.GetBoiledWater(cupSize);
 			}
 			hasResource = false;        // trigger to prevent CoffeeRawMaterials.Self.GetXXX call multiple
