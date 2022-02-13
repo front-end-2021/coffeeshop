@@ -14,6 +14,8 @@ namespace CoffeeShop.DesignPattern
 	public interface IClient
     {
 		Order GetOrder();
+		void RememberCoffee(ICoffee coffee);
+		void Receive();
 	}
 	public interface ICoffeeDisplay
 	{
@@ -29,5 +31,6 @@ namespace CoffeeShop.DesignPattern
 	{
 		ICoffee CreateWhiteCoffeeIce(Constanst.CupSize size);
 		ICoffee CreateWhiteCoffeeHot(Constanst.CupSize size);
+		ICoffee CreateBlackCoffeeIce(Constanst.CupSize size);
 	}
 }

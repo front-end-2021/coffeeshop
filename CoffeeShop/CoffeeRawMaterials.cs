@@ -15,9 +15,9 @@ namespace CoffeeShop.DesignPattern
     {
         public CoffeeRawMaterials()
         {
-            FilterCoffee = 55;
+            FilterCoffee = 72;
             Milk = 222;
-            IceBlend = 222;
+            IceBlend = 555;
             BoiledWater = 222;
 
             Console.WriteLine($"CoffeeRawMaterials: Filter Coffee = {FilterCoffee}, Milk = {Milk}, Ice Blend = {IceBlend}, Boiled Water = {BoiledWater}");
