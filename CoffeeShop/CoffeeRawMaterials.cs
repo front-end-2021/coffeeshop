@@ -15,12 +15,12 @@ namespace CoffeeShop.DesignPattern
     {
         public CoffeeRawMaterials()
         {
-            filterCoffee.Add(Constanst.FilterCoffee, 31);
-            milk.Add(Constanst.Milk, 121);
-            iceBlend.Add(Constanst.IceBlend, 181);
-            boiledWater.Add(Constanst.BoiledWater, 181);
+            FilterCoffee = 66;
+            Milk = 222;
+            IceBlend = 222;
+            BoiledWater = 222;
 
-            Console.WriteLine($"CoffeeRawMaterials {FilterCoffee}, {Milk}, {IceBlend}, {BoiledWater}");
+            Console.WriteLine($"CoffeeRawMaterials: Filter Coffee = {FilterCoffee}, Milk = {Milk}, Ice Blend = {IceBlend}, Boiled Water = {BoiledWater}");
         }
 
         private static CoffeeRawMaterials instance;
@@ -73,7 +73,7 @@ namespace CoffeeShop.DesignPattern
                 FilterCoffeeCache += value;
                 return true;
             }
-            // send message warning!!!
+            Console.WriteLine($"---> Not enough {Constanst.FilterCoffee}: {FilterCoffee}/{value}"); // send message warning!!!
             return false;
         }
         public void BackFilterCoffee(Constanst.CupSize cupSize)
@@ -138,7 +138,7 @@ namespace CoffeeShop.DesignPattern
                 MilkCache += value;
                 return true;
             }
-            // send message warning!!!
+            Console.WriteLine($"---> Not enough {Constanst.Milk}: {Milk}/{value}"); // send message warning!!!
             return false;
         }
         public void BackMilk(Constanst.CupSize cupSize)
@@ -204,7 +204,7 @@ namespace CoffeeShop.DesignPattern
                 IceBlendCache += value;
                 return true;
             }
-            // send message warning!!!
+            Console.WriteLine($"---> Not enough {Constanst.IceBlend}: {IceBlend}/{value}"); // send message warning!!!
             return false;
         }
         public void BackIceBlend(Constanst.CupSize cupSize)
@@ -270,7 +270,7 @@ namespace CoffeeShop.DesignPattern
                 BoiledWaterCache += value;
                 return true;
             }
-            // send message warning!!!
+            Console.WriteLine($"---> Not enough {Constanst.BoiledWater}: {BoiledWater}/{value}"); // send message warning!!!
             return false;
         }
         public void BackBoiledWater(Constanst.CupSize cupSize)
