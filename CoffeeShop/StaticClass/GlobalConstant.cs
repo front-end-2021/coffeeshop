@@ -1,38 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CoffeeShop.DesignPattern
+namespace CoffeeShop.GlobalConstant
 {
-    public class CoffeeMaterials
-    {
-        private List<Dictionary<byte, long>> source = new List<Dictionary<byte, long>>();
-
-
-
-        private static CoffeeMaterials instance;
-        public static CoffeeMaterials Self
-        {
-            get {
-                if (instance == null) instance = new CoffeeMaterials();
-                return instance;
-            }
-        }
-    }
-
     public static class Constanst
     {
         public enum CupSize : Byte { Small = 1, Medium = 2, Large = 3 }
-        public enum ValMid : ushort { 
+        public enum ValMid : ushort
+        {
             FilterCoffee = 30, // 30ml
             Milk = 120, // 120ml
             IceBlend = 180,   // 180ml
             BoiledWater = 180, // 180ml
             CondensedMilk = 30    // 30ml
         }
+        
+        public static string FilterCoffee = "Filter Coffee";
+        public static string Milk = "Milk";
+        public static string IceBlend = "Ice Blend";
+        public static string BoiledWater = "Boiled Water";
+        public static string CondensedMilk = "Condensed Milk";
         
         public enum Menu : byte
         {
@@ -52,7 +38,6 @@ namespace CoffeeShop.DesignPattern
     }
     public class StringValueAttribute : Attribute
     {
-
         #region Properties
 
         /// <summary>
@@ -75,17 +60,34 @@ namespace CoffeeShop.DesignPattern
     }
     public static class Global
     {
-        public static int GetFilterCoffee(Constanst.CupSize size)
+        public static int GetFilterCoffee(Constanst.CupSize cupSize)
         {
-            switch (size)
-            {
-                case Constanst.CupSize.Small:
-                    return (int)Constanst.ValMid.FilterCoffee / 2;
-                case Constanst.CupSize.Large:
-                    return (int)Constanst.ValMid.FilterCoffee * 2;
-                default:
-                    return (int)Constanst.ValMid.FilterCoffee;
-            }
+            int value = (int)Constanst.ValMid.FilterCoffee;
+            return GetValueFromCupSize(cupSize, value);
+        }
+        
+        public static int GetIceBlend(Constanst.CupSize cupSize)
+        {
+            int value = (int)Constanst.ValMid.IceBlend;
+            return GetValueFromCupSize(cupSize, value);
+        }
+        public static int GetMilk(Constanst.CupSize cupSize)
+        {
+            int value = (int)Constanst.ValMid.Milk;
+            return GetValueFromCupSize(cupSize, value);
+        }
+        public static int GetBoiledWater(Constanst.CupSize cupSize)
+        {
+            int value = (int)Constanst.ValMid.BoiledWater;
+            return GetValueFromCupSize(cupSize, value);
+        }
+        public static int GetValueFromCupSize(Constanst.CupSize cupSize, int value)
+        {
+            if (cupSize == Constanst.CupSize.Small)
+                value = value * 2 / 3;
+            if (cupSize == Constanst.CupSize.Large)
+                value = value * 3 / 2;
+            return value;
         }
 
         public static string GetMenu()

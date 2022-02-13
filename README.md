@@ -1,8 +1,6 @@
 # CoffeeShop
 Tracking info project (no file/folder):
-    ```
-        git clone --no-checkout git@github.com:front-end-2021/coffeeshop.git
-    ```
+- ```git clone --no-checkout git@github.com:front-end-2021/coffeeshop.git```
 1. ### CoffeeShop (CSharp Project): 'CoffeeShop' and 'CoffeeShopAPI' folder
     1. CoffeeShop is console project, CoffeeShopAPI is web app
         - ```git sparse-checkout set /CoffeeShop /CoffeeShopAPI```
