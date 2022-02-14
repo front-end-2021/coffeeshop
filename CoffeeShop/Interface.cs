@@ -1,19 +1,10 @@
 ﻿using CoffeeShop.GlobalConstant;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CoffeeShop.DesignPattern
 {
-	public class Order
-    {
-		public Constanst.Menu Menu { get; set; } = Constanst.Menu.BlackCoffeeHot;
-		public Constanst.CupSize CupSize { get; set; } = Constanst.CupSize.Medium;
-	}
 	public interface IClient
     {
-		Order GetOrder();
 		void RememberCoffee(ICoffee coffee);
 		void Receive();
 	}

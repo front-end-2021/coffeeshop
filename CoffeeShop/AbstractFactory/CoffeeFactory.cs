@@ -4,7 +4,28 @@ using System.Threading.Tasks;
 
 namespace CoffeeShop.DesignPattern
 {
-	public class WhiteCoffee : BlackCoffee, ICoffee
+	/// <summary>
+	/// CoffeeFactory class is Abstract Factory
+	/// </summary>
+	public class CoffeeFactory : ICoffeeFactory
+	{
+		public ICoffee CreateWhiteCoffeeIce(Constanst.CupSize size)
+		{
+			return new WhiteCoffeeIce(size);
+		}
+		public ICoffee CreateWhiteCoffeeHot(Constanst.CupSize size)
+		{
+			return new WhiteCoffeeHot(size);
+		}
+		public ICoffee CreateBlackCoffeeIce(Constanst.CupSize size)
+		{
+			return new BlackCoffeeIce(size);
+		}
+		//public ICoffee CreateBlackCoffeeHot(Constanst.CupSize size) {
+		//	return new BlackCoffeeHot(size);
+		//}
+	}
+	public class WhiteCoffee : BlackCoffee
 	{
 		protected int milk;
 		public WhiteCoffee(Constanst.CupSize cupSize) : base(cupSize)
@@ -19,7 +40,7 @@ namespace CoffeeShop.DesignPattern
 		}
 		public override string Display()
 		{
-			return string.Format("WhiteCoffee: size {0}", base.Display());
+			return string.Format("WhiteCoffee: size {0}", cupSize.ToString());
 		}
 		protected async Task TakingcoffeeAndMilk(string txtClass)
         {
@@ -83,22 +104,4 @@ namespace CoffeeShop.DesignPattern
 			return string.Format("{0}, HOT", base.Display());
 		}
 	}
-	
-	public class CoffeeFactory : ICoffeeFactory
-	{
-		public ICoffee CreateWhiteCoffeeIce(Constanst.CupSize size) {
-			return new WhiteCoffeeIce(size);
-		}
-		public ICoffee CreateWhiteCoffeeHot(Constanst.CupSize size) {
-			return new WhiteCoffeeHot(size);
-		}
-        public ICoffee CreateBlackCoffeeIce(Constanst.CupSize size)
-        {
-            return new BlackCoffeeIce(size);
-        }
-        //public ICoffee CreateBlackCoffeeHot(Constanst.CupSize size) {
-        //	return new BlackCoffeeHot(size);
-        //}
-    }
-
 }

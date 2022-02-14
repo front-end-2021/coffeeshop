@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CoffeeShop.DesignPattern;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CoffeeShop.GlobalConstant
 {
@@ -60,6 +63,17 @@ namespace CoffeeShop.GlobalConstant
     }
     public static class Global
     {
+        public static List<Task<IClient>> Tasks = new();
+        //public static void MakingFromOrderAsync()
+        //{
+        //    Task.Factory.ContinueWhenAll(Tasks.ToArray(), finishedTasks =>
+        //    {
+        //        foreach (Task<Client> finishedTask in finishedTasks)
+        //        {
+        //            finishedTask.Result.Receive();
+        //        }
+        //    });
+        //}
         public static int GetFilterCoffee(Constanst.CupSize cupSize)
         {
             int value = (int)Constanst.ValMid.FilterCoffee;
