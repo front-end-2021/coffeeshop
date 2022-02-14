@@ -9,7 +9,7 @@ using System.Text;
 namespace CoffeeShop.DesignPattern
 {
     /// <summary>
-    /// Singleton class. Get the Instance by call Self (Properties)
+    /// Singleton class. Get the Instance by CoffeeRawMaterials.Self (Properties)
     /// </summary>
     public class CoffeeRawMaterials
     {

@@ -2,7 +2,6 @@
 using CoffeeShop.GlobalConstant;
 using CoffeeShop.DesignPattern;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace CoffeeShop
 {
@@ -10,75 +9,36 @@ namespace CoffeeShop
 	{
 		static async Task Main(string[] args)
 		{
-			List<Task<IClient>> tasks = new();
-			Console.WriteLine(Global.GetMenu());
-			Client c = new(Constanst.Menu.WhiteCoffeeHot, Constanst.CupSize.Small);
-			Staff staff = new(c.GetOrder());
-			if(staff.HasResource())
-            {
-				tasks.Add(staff.TakingTo(c));
-			}
-
-			Client c2 = new(Constanst.Menu.WhiteCoffeeIce, Constanst.CupSize.Medium);
-			staff.GetOrder(c2.GetOrder());
-			if(staff.HasResource())
-            {
-				tasks.Add(staff.TakingTo(c2));
-			}
-			Client c3 = new(Constanst.Menu.BlackCoffeeIce, Constanst.CupSize.Small);
-			staff.GetOrder(c3.GetOrder());
-			if(staff.HasResource())
-            {
-				tasks.Add(staff.TakingTo(c3));
-			}
 			
-			while (tasks.Count > 0)
-            {
-				Task< IClient> finishedTask = await Task.WhenAny(tasks);
-				
-				finishedTask.Result.Receive();
+			Console.WriteLine(Global.GetMenu());
 
-				tasks.Remove(finishedTask);
-			}
-		}
-	}
-	public class Client : IClient
-	{
-        readonly Order order = new();
-		ICoffee coffee;
-		public void RememberCoffee(ICoffee coffee)
-        {
-			this.coffee = coffee;
-		}
-		public Order GetOrder()
-        {
-			return order;
-		}
-		public Client(Constanst.Menu menu, Constanst.CupSize cupSize)
-        {
-			order.Menu = menu;
-			order.CupSize = cupSize;
+			ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeHot, Constanst.CupSize.Small));
+			ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeIce, Constanst.CupSize.Medium));
+			ClientCode(new ClientCreator(Constanst.Menu.BlackCoffeeIce, Constanst.CupSize.Small));
+
+            while (Global.Tasks.Count > 0)
+            {
+                Task<IClient> finishedTask = await Task.WhenAny(Global.Tasks);
+                finishedTask.Result.Receive();
+                Global.Tasks.Remove(finishedTask);
+            }
         }
-		public void Receive()
+		static void ClientCode(Creator creator)
 		{
-			if (coffee == null) return;
-			Console.WriteLine("Let check order: " + coffee.Ready().Display());
+			creator.ProcessingOrder(); 
 		}
 	}
+	
 	public class Staff
 	{
-        Order order;
-		ICoffeeFactory factory; 
+        readonly Constanst.Menu menu;
+        readonly ICoffeeFactory factory; 
 		ICoffee coffee;
-		public ICoffee Coffee { get { return coffee; } }
-		public Staff(Order order)
+		
+		public Staff(Constanst.Menu menu)
         {
-			GetOrder(order);
-		}
-		public void GetOrder(Order order)
-        {
-			this.order = order;
-			switch (order.Menu)
+			this.menu = menu;
+			switch (menu)
 			{
 				case Constanst.Menu.WhiteCoffeeHot:
 				case Constanst.Menu.WhiteCoffeeIce:
@@ -91,20 +51,20 @@ namespace CoffeeShop
 					break;
 			}
 		}
-		public bool HasResource()
+		public bool HasResource(Constanst.CupSize cupSize)
 		{
 			if (factory == null) return false;
-			switch (order.Menu)
+			switch (menu)
 			{
 				case Constanst.Menu.WhiteCoffeeHot:
-					coffee = factory.CreateWhiteCoffeeHot(order.CupSize);
+					coffee = factory.CreateWhiteCoffeeHot(cupSize);
 					break;
 				case Constanst.Menu.WhiteCoffeeIce:
-					coffee = factory.CreateWhiteCoffeeIce(order.CupSize);
+					coffee = factory.CreateWhiteCoffeeIce(cupSize);
 					break;
 				case Constanst.Menu.BlackCoffeeHot:
 				case Constanst.Menu.BlackCoffeeIce:
-					coffee = factory.CreateBlackCoffeeIce(order.CupSize); 
+					coffee = factory.CreateBlackCoffeeIce(cupSize); 
 					break;
 				case Constanst.Menu.MilkCoffeeHot:
 				case Constanst.Menu.MilkCoffeeIce:
@@ -113,7 +73,7 @@ namespace CoffeeShop
 			}
 			bool hasResource = coffee != null && coffee.HasResource();
 			if(!hasResource)
-				Console.WriteLine($"Sorry, has not {ExtensionMethod.GetStringValue(order.Menu)} with {order.CupSize} at the moment");
+				Console.WriteLine($"Sorry, has not {ExtensionMethod.GetStringValue(menu)} with {cupSize} at the moment");
 			return hasResource;
 		}
 		public async Task<IClient> TakingTo(IClient client)
