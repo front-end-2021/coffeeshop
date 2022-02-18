@@ -9,8 +9,8 @@ namespace CoffeeShop.DesignPattern
 	/// </summary>
 	public class CoffeeFactory : ICoffeeFactory
 	{
-		public Director director = new();
-		CoffeeBuilder builder = new();
+        readonly Director director = new();
+        readonly CoffeeBuilder builder = new();
 
 		public CoffeeFactory()
         {

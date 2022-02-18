@@ -79,7 +79,6 @@ namespace CoffeeShop.GlobalConstant
             int value = (int)Constanst.ValMid.FilterCoffee;
             return GetValueFromCupSize(cupSize, value);
         }
-        
         public static int GetIceBlend(Constanst.CupSize cupSize)
         {
             int value = (int)Constanst.ValMid.IceBlend;
