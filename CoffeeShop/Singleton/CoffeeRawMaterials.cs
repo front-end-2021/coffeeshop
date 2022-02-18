@@ -15,18 +15,20 @@ namespace CoffeeShop.DesignPattern
     {
         public CoffeeRawMaterials()
         {
-            FilterCoffee = 72;
+            FilterCoffee = 222;
             Milk = 222;
-            IceBlend = 555;
-            BoiledWater = 222;
+            IceBlend = 888;
+            BoiledWater = 555;
 
-            Console.WriteLine($"CoffeeRawMaterials: Filter Coffee = {FilterCoffee}, Milk = {Milk}, Ice Blend = {IceBlend}, Boiled Water = {BoiledWater}");
+            Console.WriteLine(To_String());
         }
-
-        private static CoffeeRawMaterials instance;
+        public string To_String()
+        {
+            return string.Format($"CoffeeRawMaterials: Filter Coffee = {FilterCoffee}, Milk = {Milk}, Ice Blend = {IceBlend}, Boiled Water = {BoiledWater}");
+        }
+        #region FilterCoffee
         private readonly Dictionary<string, int> filterCoffee = new();
         private readonly Dictionary<string, int> filterCoffeeCache = new();
-
         private int FilterCoffee
         {
             set {
@@ -63,7 +65,6 @@ namespace CoffeeShop.DesignPattern
             FilterCoffeeCache -= value;
             return value;
         }
-
         public bool CheckFilterCoffee(Constanst.CupSize cupSize)
         {
             int value = Global.GetFilterCoffee(cupSize);
@@ -88,7 +89,9 @@ namespace CoffeeShop.DesignPattern
                 Console.WriteLine($"FilterCoffeeCache has {value}");
             }
         }
+        #endregion
 
+        #region Milk
         private readonly Dictionary<string, int> milk = new();
         private readonly Dictionary<string, int> milkCache = new();
         private int Milk
@@ -154,7 +157,9 @@ namespace CoffeeShop.DesignPattern
                 Console.WriteLine($"MilkCache has {value}");
             }
         }
-        
+        #endregion
+
+        #region IceBlend
         private readonly Dictionary<string, int> iceBlend = new();
         private readonly Dictionary<string, int> iceBlendCache = new();
         private int IceBlend
@@ -220,7 +225,9 @@ namespace CoffeeShop.DesignPattern
                 Console.WriteLine($"MilkCache has {value}");
             }
         }
-        
+        #endregion
+
+        #region BoiledWater
         private readonly Dictionary<string, int> boiledWater = new();
         private readonly Dictionary<string, int> boiledWaterCache = new();
         private int BoiledWater
@@ -286,7 +293,76 @@ namespace CoffeeShop.DesignPattern
                 Console.WriteLine($"MilkCache has {value}");
             }
         }
+        #endregion
+        #region CondensedMilk
+        private readonly Dictionary<string, int> condensedMilk = new();
+        private readonly Dictionary<string, int> condensedMilkCache = new();
+        private int CondensedMilk
+        {
+            set
+            {
+                if (condensedMilk.ContainsKey(Constanst.CondensedMilk))
+                    condensedMilk[Constanst.CondensedMilk] = value;
+                else
+                    condensedMilk.Add(Constanst.CondensedMilk, value);
+            }
+            get
+            {
+                if (!condensedMilk.ContainsKey(Constanst.CondensedMilk))
+                    condensedMilk.Add(Constanst.CondensedMilk, 0);
+                return condensedMilk[Constanst.CondensedMilk];
+            }
+        }
+        private int CondensedMilkCache
+        {
+            set
+            {
+                if (condensedMilkCache.ContainsKey(Constanst.CondensedMilk))
+                    condensedMilkCache[Constanst.CondensedMilk] = value;
+                else
+                    condensedMilkCache.Add(Constanst.CondensedMilk, value);
+            }
+            get
+            {
+                if (!condensedMilkCache.ContainsKey(Constanst.CondensedMilk))
+                    condensedMilkCache.Add(Constanst.CondensedMilk, 0);
+                return condensedMilkCache[Constanst.CondensedMilk];
+            }
+        }
+        public int GetcondensedMilk(Constanst.CupSize cupSize)
+        {
+            int value = Global.GetcondensedMilk(cupSize);
+            CondensedMilkCache -= value;
+            return value;
+        }
+        public bool CheckCondensedMilk(Constanst.CupSize cupSize)
+        {
+            int value = Global.GetcondensedMilk(cupSize);
+            if (CondensedMilk >= value)
+            {
+                CondensedMilk -= value;
+                CondensedMilkCache += value;
+                return true;
+            }
+            Console.WriteLine($"---> Not enough {Constanst.CondensedMilk}: {CondensedMilk}/{value}"); // send message warning!!!
+            return false;
+        }
+        public void BackCondensedMilk(Constanst.CupSize cupSize)
+        {
+            int value = Global.GetcondensedMilk(cupSize);
+            if (CondensedMilkCache >= value)
+            {
+                CondensedMilkCache -= value;
+                CondensedMilk += value;
+            }
+            else
+            {
+                Console.WriteLine($"CondensedMilkCache has {value}");
+            }
+        }
+        #endregion
 
+        private static CoffeeRawMaterials instance;
         public static CoffeeRawMaterials Self
         {
             get {

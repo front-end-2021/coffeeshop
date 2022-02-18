@@ -95,6 +95,11 @@ namespace CoffeeShop.GlobalConstant
             int value = (int)Constanst.ValMid.BoiledWater;
             return GetValueFromCupSize(cupSize, value);
         }
+        public static int GetcondensedMilk(Constanst.CupSize cupSize)
+        {
+            int value = (int)Constanst.ValMid.CondensedMilk;
+            return GetValueFromCupSize(cupSize, value);
+        }
         public static int GetValueFromCupSize(Constanst.CupSize cupSize, int value)
         {
             if (cupSize == Constanst.CupSize.Small)

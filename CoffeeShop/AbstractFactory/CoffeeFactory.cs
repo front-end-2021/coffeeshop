@@ -9,6 +9,13 @@ namespace CoffeeShop.DesignPattern
 	/// </summary>
 	public class CoffeeFactory : ICoffeeFactory
 	{
+		public Director director = new();
+		CoffeeBuilder builder = new();
+
+		public CoffeeFactory()
+        {
+			director.Builder = builder;
+		}
 		public ICoffee CreateWhiteCoffeeIce(Constanst.CupSize size)
 		{
 			return new WhiteCoffeeIce(size);
@@ -21,10 +28,20 @@ namespace CoffeeShop.DesignPattern
 		{
 			return new BlackCoffeeIce(size);
 		}
-		//public ICoffee CreateBlackCoffeeHot(Constanst.CupSize size) {
-		//	return new BlackCoffeeHot(size);
-		//}
-	}
+        public ICoffee CreateBlackCoffeeHot(Constanst.CupSize size)
+        {
+            return new BlackCoffeeHot(size);
+        }
+
+        public Director GetDirector()
+        {
+			return director;
+		}
+        public CoffeeBuilder GetBuilder()
+        {
+			return builder;
+		}
+    }
 	public class WhiteCoffee : BlackCoffee
 	{
 		protected int milk;
@@ -33,42 +50,30 @@ namespace CoffeeShop.DesignPattern
 			bool hasMilk = CoffeeRawMaterials.Self.CheckMilk(cupSize);
 			hasResource = hasResource && hasMilk;
 		}
-		protected void TakeCoffeeAndMilk()
-        {
-			TakeFilterCoffee();
-			milk = CoffeeRawMaterials.Self.GetMilk(cupSize);
-		}
 		public override string Display()
 		{
 			return string.Format("WhiteCoffee: size {0}", cupSize.ToString());
 		}
-		protected async Task TakingcoffeeAndMilk(string txtClass)
-        {
-			Console.WriteLine($"Making {txtClass} size {cupSize} in {timeToWait}");
-			TakeCoffeeAndMilk();
-			await Task.Delay(timeToWait);
-		}
 	}
 	public class WhiteCoffeeIce : WhiteCoffee
 	{
-		int iceBlend;
 		public WhiteCoffeeIce(Constanst.CupSize cupSize) : base(cupSize) {
 			bool hasIce = CoffeeRawMaterials.Self.CheckIceBlend(cupSize);
 			hasResource = hasResource && hasIce;
-			timeToWait = 3000;
 		}
-		public override async Task Make()
+		public override async Task Make(Director director, CoffeeBuilder builder)
 		{
 			if (hasResource)
             {
-				await TakingcoffeeAndMilk("WhiteCoffeeIce");
-				iceBlend = CoffeeRawMaterials.Self.GetIceBlend(cupSize);
+				int tWait = director.BuildWhiteCoffeeIce(cupSize);
+				Console.WriteLine($"Making WhiteCoffeeIce size {cupSize} in {tWait}");
+				sumM = await builder.GetCoffee().Taking();
 			}
 			hasResource = false;        // trigger to prevent CoffeeRawMaterials.Self.GetXXX call multiple
 		}
 		public override ICoffeeDisplay Ready() {
 			int size = (int)Constanst.ValMid.FilterCoffee + (int)Constanst.ValMid.Milk + (int)Constanst.ValMid.IceBlend;
-			if (Global.GetValueFromCupSize(cupSize, size) == (filterCoffee + milk + iceBlend)) 
+			if (Global.GetValueFromCupSize(cupSize, size) == sumM) 
 				return this; 
 			return null; 
 		}
@@ -79,24 +84,24 @@ namespace CoffeeShop.DesignPattern
 	}
 	public class WhiteCoffeeHot : WhiteCoffee
 	{
-		int boldedW;
 		public WhiteCoffeeHot(Constanst.CupSize size) : base(size) {
 			bool hasBoildWater = CoffeeRawMaterials.Self.CheckBoiledWater(cupSize);
 			hasResource = hasResource && hasBoildWater;
 		}		
-		public override async Task Make()
+		public override async Task Make(Director director, CoffeeBuilder builder)
 		{
 			if (hasResource)
-            {
-				await TakingcoffeeAndMilk("WhiteCoffeeHot");
-				boldedW = CoffeeRawMaterials.Self.GetBoiledWater(cupSize);
+			{
+				int tWait = director.BuildWhiteCoffeeHot(cupSize);
+				Console.WriteLine($"Making WhiteCoffeeHot size {cupSize} in {tWait}"); 
+				sumM = await builder.GetCoffee().Taking();
 			}
 			hasResource = false;        // trigger to prevent CoffeeRawMaterials.Self.GetXXX call multiple
 		}
 		public override ICoffeeDisplay Ready()
 		{
 			int size = (int)Constanst.ValMid.FilterCoffee + (int)Constanst.ValMid.Milk + (int)Constanst.ValMid.BoiledWater;
-			if (Global.GetValueFromCupSize(cupSize, size) == (filterCoffee + milk + boldedW))
+			if (Global.GetValueFromCupSize(cupSize, size) == sumM)
 				return this;
 			return null;
 		}
