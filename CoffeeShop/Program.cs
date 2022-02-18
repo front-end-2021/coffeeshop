@@ -9,12 +9,13 @@ namespace CoffeeShop
 	{
 		static async Task Main(string[] args)
 		{
-			
 			Console.WriteLine(Global.GetMenu());
+
 
 			ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeHot, Constanst.CupSize.Small));
 			ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeIce, Constanst.CupSize.Medium));
 			ClientCode(new ClientCreator(Constanst.Menu.BlackCoffeeIce, Constanst.CupSize.Small));
+			ClientCode(new ClientCreator(Constanst.Menu.BlackCoffeeHot, Constanst.CupSize.Large));
 
             while (Global.Tasks.Count > 0)
             {
@@ -63,8 +64,10 @@ namespace CoffeeShop
 					coffee = factory.CreateWhiteCoffeeIce(cupSize);
 					break;
 				case Constanst.Menu.BlackCoffeeHot:
+					coffee = factory.CreateBlackCoffeeHot(cupSize);
+					break;
 				case Constanst.Menu.BlackCoffeeIce:
-					coffee = factory.CreateBlackCoffeeIce(cupSize); 
+					coffee = factory.CreateBlackCoffeeIce(cupSize);
 					break;
 				case Constanst.Menu.MilkCoffeeHot:
 				case Constanst.Menu.MilkCoffeeIce:
@@ -78,8 +81,8 @@ namespace CoffeeShop
 		}
 		public async Task<IClient> TakingTo(IClient client)
         {
-			client.RememberCoffee(coffee);
-			await coffee.Make(); // making
+			client.RememberCoffee(coffee);			
+			await coffee.Make(factory.GetDirector(), factory.GetBuilder()); // making
 			return client;
 		}
 	}
