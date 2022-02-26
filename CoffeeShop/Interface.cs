@@ -14,7 +14,7 @@ namespace CoffeeShop.DesignPattern
 	public interface IClient
     {
 		void RememberCoffee(ICoffee coffee);
-		void Receive();
+		string Receive();
 	}
 	public interface ICoffeeDisplay
 	{

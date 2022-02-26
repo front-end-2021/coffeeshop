@@ -39,10 +39,10 @@ namespace CoffeeShop.DesignPattern
             this.coffee = coffee;
         }
        
-        public void Receive()
+        public string Receive()
         {
-            if (coffee == null) return;
-            Console.WriteLine("Let check order: " + coffee.Ready().Display());
+            if (coffee == null) return string.Empty;
+            return string.Format($"Let check order:  {coffee.Ready().Display()}");
         }
     }
 }
