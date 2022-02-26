@@ -10,6 +10,10 @@
 6. Get files and folder: ```git checkout main```
 7. ```git pull```
 8. Rightclick TestCoffeeShop project > Add > Project Reference...
-9. 
+	- ![Open menu](https://raw.githubusercontent.com/front-end-2021/coffeeshop/main/images/AddProjectReferenceToTestProject.jpg)
+9. Select Browse... > Select file > Add
+	- ![Select dll](https://raw.githubusercontent.com/front-end-2021/coffeeshop/main/images/AddProjectReferenceToTestProject%202.jpg)
+10. Right click function and Run Test(s)
+	- TestOrderWhiteCoffeeHotSmallAsync
 
 ##### Note: sparse-checkout available +git v2.26.0
