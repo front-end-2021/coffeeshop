@@ -15,5 +15,6 @@
 	- ![Select dll](https://raw.githubusercontent.com/front-end-2021/coffeeshop/main/images/AddProjectReferenceToTestProject%202.jpg)
 10. Right click function and Run Test(s)
 	- TestOrderWhiteCoffeeHotSmallAsync
+11. Build CoffeeShop project after you change code to update dll file for TestCoffeeShop reference
 
 ##### Note: sparse-checkout available +git v2.26.0
