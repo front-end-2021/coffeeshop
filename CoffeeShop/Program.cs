@@ -11,11 +11,10 @@ namespace CoffeeShop
 		{
 			Console.WriteLine(Global.GetMenu());
 
-
-			ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeHot, Constanst.CupSize.Small));
-			ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeIce, Constanst.CupSize.Medium));
-			ClientCode(new ClientCreator(Constanst.Menu.BlackCoffeeIce, Constanst.CupSize.Small));
-			ClientCode(new ClientCreator(Constanst.Menu.BlackCoffeeHot, Constanst.CupSize.Large));
+			TheCoffeeShopMall.ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeHot, Constanst.CupSize.Small));
+			TheCoffeeShopMall.ClientCode(new ClientCreator(Constanst.Menu.WhiteCoffeeIce, Constanst.CupSize.Medium));
+			TheCoffeeShopMall.ClientCode(new ClientCreator(Constanst.Menu.BlackCoffeeIce, Constanst.CupSize.Small));
+			TheCoffeeShopMall.ClientCode(new ClientCreator(Constanst.Menu.BlackCoffeeHot, Constanst.CupSize.Large));
 
             while (Global.Tasks.Count > 0)
             {
@@ -24,9 +23,26 @@ namespace CoffeeShop
                 Global.Tasks.Remove(finishedTask);
             }
         }
-		static void ClientCode(Creator creator)
+	}
+
+	public static class TheCoffeeShopMall		// use for UnitTest
+    {
+		public static async Task<string> OrderCoffee(Constanst.Menu menu, Constanst.CupSize cupSize)
+        {
+			ClientCode(new ClientCreator(menu, cupSize));
+			while (Global.Tasks.Count > 0)
+			{
+				Task<IClient> finishedTask = await Task.WhenAny(Global.Tasks);
+				string res = finishedTask.Result.Receive();
+				Console.WriteLine(res);
+				Global.Tasks.Remove(finishedTask);
+				return res;
+			}
+			return string.Empty;
+		}
+		public static void ClientCode(Creator creator)
 		{
-			creator.ProcessingOrder(); 
+			creator.ProcessingOrder();
 		}
 	}
 	
