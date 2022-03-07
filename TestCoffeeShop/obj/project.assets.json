@@ -5917,19 +5917,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dainb\\.nuget\\packages\\": {}
+    "C:\\Users\\nguyen.ba.dai\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\_Project\\_StartupCoffeeShop\\TestCoffeeShop\\TestCoffeeShop.csproj",
+      "projectUniqueName": "D:\\Projects\\dainb_\\front-end-2021\\TestCoffeeShop\\TestCoffeeShop.csproj",
       "projectName": "TestCoffeeShop",
-      "projectPath": "D:\\_Project\\_StartupCoffeeShop\\TestCoffeeShop\\TestCoffeeShop.csproj",
-      "packagesPath": "C:\\Users\\dainb\\.nuget\\packages\\",
-      "outputPath": "D:\\_Project\\_StartupCoffeeShop\\TestCoffeeShop\\obj\\",
+      "projectPath": "D:\\Projects\\dainb_\\front-end-2021\\TestCoffeeShop\\TestCoffeeShop.csproj",
+      "packagesPath": "C:\\Users\\nguyen.ba.dai\\.nuget\\packages\\",
+      "outputPath": "D:\\Projects\\dainb_\\front-end-2021\\TestCoffeeShop\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\dainb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\nguyen.ba.dai\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5991,7 +5991,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
